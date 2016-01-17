@@ -146,6 +146,14 @@ module.exports = (robot) ->
     robot.hear /I like pie/i, (res) ->
         res.emote "makes a freshly baked pie"
  
+    robot.hear /!hello (.*)/i, (res) ->
+        target = res.match[1]
+        now = new Date()
+        if ! (target of trollersDict)
+            res.send "你真心的向大家表示問候。"
+        else
+            res.send "你真心的向 #{target} 表示問候。"
+            
   # robot.hear /badger/i, (res) ->
   #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
   #
