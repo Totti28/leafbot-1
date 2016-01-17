@@ -142,6 +142,9 @@ module.exports = (robot) ->
             else if status == "damaged"
                 res.send "打了 #{target} 一巴掌。" + script
                 res.send "HP 剩下 #{health}。"
+
+    robot.hear /I like pie/i, (res) ->
+        res.emote "makes a freshly baked pie"
  
   # robot.hear /badger/i, (res) ->
   #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
@@ -153,8 +156,6 @@ module.exports = (robot) ->
   #   else
   #     res.reply "Opening #{doorType} doors"
   #
-  # robot.hear /I like pie/i, (res) ->
-  #   res.emote "makes a freshly baked pie"
   #
   # lulz = ['lol', 'rofl', 'lmao']
   #
