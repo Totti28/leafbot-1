@@ -142,7 +142,22 @@ module.exports = (robot) ->
             else if status == "damaged"
                 res.send "打了 #{target} 一巴掌。" + script
                 res.send "HP 剩下 #{health}。"
+<<<<<<< HEAD
+
+    robot.hear /I like pie/i, (res) ->
+        res.emote "makes a freshly baked pie"
  
+=======
+                
+ robot.hear /!hello (.*)/i, (res) ->
+        target = res.match[1]
+        now = new Date()
+        if ! (target of trollersDict)
+            res.send "你真心的向大家表示問候。"
+        else
+            res.send "你真心的向 #{target} 表示問候。"
+            
+>>>>>>> 105970426df9b2f5349107626c742c4c17cd42ee
   # robot.hear /badger/i, (res) ->
   #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
   #
@@ -153,8 +168,6 @@ module.exports = (robot) ->
   #   else
   #     res.reply "Opening #{doorType} doors"
   #
-  # robot.hear /I like pie/i, (res) ->
-  #   res.emote "makes a freshly baked pie"
   #
   # lulz = ['lol', 'rofl', 'lmao']
   #
