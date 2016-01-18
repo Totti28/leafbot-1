@@ -182,7 +182,11 @@ module.exports = (robot) ->
         target = res.match[1]
         username = get_username(res)
         res.send "#{username} 真心的向 #{target} 表示問候。"
-            
+    
+    robot.hear /!gquit/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 離開了公會。"   
+        
     robot.topic (res) ->
         res.send "#{res.message.text}? 聽起來很有趣！"
 
