@@ -49,7 +49,7 @@ module.exports = (robot) ->
             health: 100
             spawn: start
             respawn: 60
-            roar: ["你已經死了"]
+            roar: ["你已經死了", "（揍ㄏㄌ）"]
         },
         {
             name: "KMT"
@@ -65,7 +65,7 @@ module.exports = (robot) ->
             health: 100
             spawn: start
             respawn: 60
-            roar: ["啪～", "嗚嗚為什麼打我QAQ"]
+            roar: ["幹嘛？叫我喔", "煩啊，衝啥？", "打屁，讓你而已", "再打ㄧ次試試看"]
         }
     ]
 

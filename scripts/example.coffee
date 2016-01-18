@@ -144,13 +144,13 @@ module.exports = (robot) ->
                 status = "damaged"
             
  
-    robot.hear /!slap (.*)/i, (res) ->
+    robot.hear /!(slap|punch) (.*)/i, (res) ->
         username = get_username(res)
         check_cooldown_status = check_cooldown(username)
         if check_cooldown_status == 1
             res.reply "你太多話了喔～"
             return
-        target = res.match[1]
+        target = res.match[2]
         now = new Date()
         if ! (target of trollersDict)
             res.send "你不能打 #{target}，他是無辜的。"
