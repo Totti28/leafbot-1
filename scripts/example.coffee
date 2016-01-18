@@ -28,6 +28,14 @@ module.exports = (robot) ->
             roar: ["`>w<`", "喵", "喔"]
         },
         {
+            name: "smallbighead"
+            max_health: 100
+            health: 100
+            spawn: start
+            respawn: 60
+            roar: ["額", "WTF", "幹！幹！幹！幹！幹！"]
+        },
+        {
             name: "totti"
             max_health: 100
             health: 100
