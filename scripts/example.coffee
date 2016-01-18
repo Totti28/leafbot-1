@@ -49,7 +49,7 @@ module.exports = (robot) ->
             health: 100
             spawn: start
             respawn: 60
-            roar: ["你已經死了"]
+            roar: ["你已經死了", "（揍ㄏㄌ）"]
         },
         {
             name: "KMT"
@@ -58,6 +58,14 @@ module.exports = (robot) ->
             spawn: start
             respawn: 5
             roar: ["歡迎子瑜回家", "三環三線夢裡相見", "（對台灣人民揮國旗）", "（中共來了快收國旗）", "國民黨是最團結民主的政黨", "沉默的多數站出來"]
+        },
+        {
+            name: "泡泡"
+            max_health: 100
+            health: 100
+            spawn: start
+            respawn: 60
+            roar: ["幹嘛？叫我喔", "煩啊，衝啥？", "打屁，讓你而已", "再打ㄧ次試試看"]
         }
     ]
 
@@ -70,8 +78,22 @@ module.exports = (robot) ->
     #    dict
  
     trollersDict = trollers.toDict('name')
+    cooldown = {}
+    default_cooldown = 3 # 3sec per cmd
+    default_long_cooldown = 60 # a longer cooldown
+    default_long_num_cmd = 10 # per 10 cmds
     # => { age: 1, name: "Bubbles" }
- 
+
+    # helper method to get sender of the message
+    get_username = (response) ->
+        "@#{response.message.user.name}"
+     
+    # helper method to get channel of originating message
+    get_channel = (response) ->
+        if response.message.room == response.message.user.name
+            "@#{response.message.room}"
+        else
+            "##{response.message.room}"
 
     robot.hear /time/i, (res) ->
         now = new Date()
@@ -86,6 +108,18 @@ module.exports = (robot) ->
  
     robot.respond /閉嘴/i, (res) ->
         res.reply "你才閉嘴，你ㄊㄊ全家都閉嘴"
+
+    check_cooldown = (username) ->
+        now = new Date()
+        if ! (username of cooldown)
+            cooldown[username] = now
+            return 0
+        else
+            if (now - cooldown[username]) / 1e3 > default_cooldown
+                cooldown[username] = now
+                return 0
+            else # CDing, block
+                return 1
 
     attack = (target, damage) ->
         health = trollersDict[target]["health"]
@@ -111,10 +145,16 @@ module.exports = (robot) ->
             
  
     robot.hear /!slap (.*)/i, (res) ->
+        username = get_username(res)
+        check_cooldown_status = check_cooldown(username)
+        if check_cooldown_status == 1
+            res.reply "你太多話了喔～"
+            return
         target = res.match[1]
         now = new Date()
         if ! (target of trollersDict)
             res.send "你不能打 #{target}，他是無辜的。"
+            return
         else
             status = attack(target, 10)
             
@@ -123,48 +163,45 @@ module.exports = (robot) ->
             spawn = trollersDict[target]["spawn"]
             respawn = trollersDict[target]["respawn"]
             if status == "fail"
-                res.send "打了 #{target} 一巴掌。不痛不癢。" + script
+                res.send "#{username} 打了 #{target} 一巴掌。不痛不癢。" + script
             else if status == "dead"
                 res.send "#{target} 已死，有事燒紙"
             else if status == "respawned"
-                res.send "#{target} 重生後馬上被賞一巴掌。" + script
+                res.send "#{target} 重生後馬上被 #{username} 賞一巴掌。" + script
                 res.send "HP 剩下 #{health}"
             else if status == "die"
-                res.send "#{target} 承受不住這一巴掌而死去了。" + script + "（重生時間 #{respawn} 秒）"
+                res.send "#{target} 承受不住 #{username} 這一巴掌而死去了。" + script + "（重生時間 #{respawn} 秒）"
             else if status == "damaged"
-                res.send "打了 #{target} 一巴掌。" + script
+                res.send "#{username} 打了 #{target} 一巴掌。" + script
                 res.send "HP 剩下 #{health}。"
+
+    robot.hear /I like pie/i, (res) ->
+        res.emote "makes a freshly baked pie"
  
-  # robot.hear /badger/i, (res) ->
-  #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
-  #
-  # robot.respond /open the (.*) doors/i, (res) ->
-  #   doorType = res.match[1]
-  #   if doorType is "pod bay"
-  #     res.reply "I'm afraid I can't let you do that."
-  #   else
-  #     res.reply "Opening #{doorType} doors"
-  #
-  # robot.hear /I like pie/i, (res) ->
-  #   res.emote "makes a freshly baked pie"
-  #
-  # lulz = ['lol', 'rofl', 'lmao']
-  #
-  # robot.respond /lulz/i, (res) ->
-  #   res.send res.random lulz
-  #
-  # robot.topic (res) ->
-  #   res.send "#{res.message.text}? That's a Paddlin'"
-  #
-  #
-  # enterReplies = ['Hi', 'Target Acquired', 'Firing', 'Hello friend.', 'Gotcha', 'I see you']
-  # leaveReplies = ['Are you still there?', 'Target lost', 'Searching']
-  #
-  # robot.enter (res) ->
-  #   res.send res.random enterReplies
-  # robot.leave (res) ->
-  #   res.send res.random leaveReplies
-  #
+    robot.hear /!hello (.*)/i, (res) ->
+        target = res.match[1]
+        username = get_username(res)
+        res.send "#{username} 真心的向 #{target} 表示問候。"
+    
+    robot.hear /!gquit/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 離開了公會。"   
+        
+    robot.topic (res) ->
+        res.send "#{res.message.text}? 聽起來很有趣！"
+
+    enterReplies = ['Hi', 'Target Acquired', 'Firing', 'Hello friend.', 'Gotcha', 'I see you']
+    leaveReplies = ['Are you still there?', 'Target lost', 'Searching']
+    robot.enter (res) ->
+        res.send res.random enterReplies
+    robot.leave (res) ->
+        res.send res.random leaveReplies
+
+    robot.error (err, res) ->
+        robot.logger.error "DOES NOT COMPUTE"
+        if res?
+            res.reply "DOES NOT COMPUTE"
+  
   # answer = process.env.HUBOT_ANSWER_TO_THE_ULTIMATE_QUESTION_OF_LIFE_THE_UNIVERSE_AND_EVERYTHING
   #
   # robot.respond /what is the answer to the ultimate question of life/, (res) ->
@@ -208,11 +245,6 @@ module.exports = (robot) ->
   #
   #   res.send 'OK'
   #
-  # robot.error (err, res) ->
-  #   robot.logger.error "DOES NOT COMPUTE"
-  #
-  #   if res?
-  #     res.reply "DOES NOT COMPUTE"
   #
   # robot.respond /have a soda/i, (res) ->
   #   # Get number of sodas had (coerced to a number).
