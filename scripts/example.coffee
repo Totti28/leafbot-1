@@ -210,7 +210,45 @@ module.exports = (robot) ->
     robot.hear /!attack/i, (res) ->
         username = get_username(res)
         res.send "#{username} 要求大家進攻。"
+    
+    robot.hear /!cry/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 哭了。"
         
+    robot.hear /!agree/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 同意這個觀點。"
+    robot.hear /!burp/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 打了一個嗝。"
+    robot.hear /!eat/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 開始吃東西。"
+    robot.hear /!in/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 硬了。"
+    robot.hear /!cold/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 覺得很冷。"
+    robot.hear /!hot/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 覺得很熱！"
+    robot.hear /!strong/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 展示了自己的肌肉。好壯阿！"    
+    robot.hear /!flirt (.*)/i, (res) ->
+        target = res.match[1]
+        username = get_username(res)
+        res.send "#{username} 開始跟 #{target} 調情。"  
+    robot.hear /!搖頭/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 搖了搖頭。"
+    robot.hear /!dance/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 開始跳舞。"
+    robot.hear /!clap/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 激動地鼓掌。"
     robot.topic (res) ->
         res.send "#{res.message.text}? 聽起來很有趣！"
     
