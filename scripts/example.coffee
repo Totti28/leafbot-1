@@ -73,7 +73,15 @@ module.exports = (robot) ->
             health: 100
             spawn: start
             respawn: 60
-            roar: ["幹嘛？叫我喔", "煩啊，衝啥？", "打屁，讓你而已", "再打ㄧ次試試看"]
+            roar: ["幹嘛？叫我喔", "煩啊，衝啥？", "打屁，讓你而已", "再打ㄧ次試試看","(拿電熨斗烤土司)"]
+        }
+        {
+            name: "團長"
+            max_health: 100
+            health: 100
+            spawn: start
+            respawn: 60
+            roar: ["嗚嗚嗚", "T_T", "=口=!!", "阿","=口=!??"]
         }
     ]
 
@@ -194,9 +202,22 @@ module.exports = (robot) ->
     robot.hear /!gquit/i, (res) ->
         username = get_username(res)
         res.send "#{username} 離開了公會。"   
+    
+    robot.hear /!nod/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 點了點頭。" 
+    
+    robot.hear /!attack/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 要求大家進攻。"
         
     robot.topic (res) ->
         res.send "#{res.message.text}? 聽起來很有趣！"
+    
+    robot.hear /!hungry (.*)/i, (res) ->
+        target = res.match[1]
+        username = get_username(res)
+        res.send "#{username} 感到很餓，也許在 #{target} 那裏可以找到一些食物。"
 
     enterReplies = ['Hi', 'Target Acquired', 'Firing', 'Hello friend.', 'Gotcha', 'I see you']
     leaveReplies = ['Are you still there?', 'Target lost', 'Searching']
