@@ -137,12 +137,14 @@ module.exports = (robot) ->
             else # CDing, block
                 return 1
 
-    attack = (target, damage) ->
+    attack = (source, target, damage) ->
         health = trollersDict[target]["health"]
         spawn = trollersDict[target]["spawn"]
         respawn = trollersDict[target]["respawn"]
         now = new Date()
-        if target in ["DDT", "orinpix"]
+        if target in ["DDT"]
+            status = "fail"
+        else if target == "orinpix"
             status = "fail"
         else if health <= 0
             if (now - spawn) / 1e3 < respawn
@@ -172,7 +174,7 @@ module.exports = (robot) ->
             res.send "你不能打 #{target}，他是無辜的。"
             return
         else
-            status = attack(target, 10)
+            status = attack(username, target, 10)
             
             script = "#{target}：#{res.random trollersDict[target]["roar"]}"
             health = trollersDict[target]["health"]
