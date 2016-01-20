@@ -145,7 +145,10 @@ module.exports = (robot) ->
         if target in ["DDT"]
             status = "fail"
         else if target == "orinpix"
-            status = "fail"
+            if source of trollersDict
+                trollersDict[source]["health"] = 0
+                trollersDict[source]["spawn"] = now
+            status = "revenge"
         else if health <= 0
             if (now - spawn) / 1e3 < respawn
                 status = "dead"
@@ -182,6 +185,8 @@ module.exports = (robot) ->
             respawn = trollersDict[target]["respawn"]
             if status == "fail"
                 res.send "#{username} 打了 #{target} 一巴掌。不痛不癢。" + script
+            else if status == "revenge"
+                res.send "#{username} 遭到 #{target} 強力反擊而死亡。"
             else if status == "dead"
                 res.send "#{target} 已死，有事燒紙"
             else if status == "respawned"
