@@ -263,7 +263,11 @@ module.exports = (robot) ->
         target = res.match[1]
         username = get_username(res)
         res.send "#{username} 感到很餓，也許在 #{target} 那裏可以找到一些食物。"
-
+    robot.hear /!bonk (.*)/i, (res) ->
+        target = res.match[1]
+        username = get_username(res)
+        res.send "#{username} 重重的敲了 #{target} 的腦袋，發出「咚」的一聲。。" 
+        
     enterReplies = ['Hi', 'Target Acquired', 'Firing', 'Hello friend.', 'Gotcha', 'I see you']
     leaveReplies = ['Are you still there?', 'Target lost', 'Searching']
     robot.enter (res) ->
