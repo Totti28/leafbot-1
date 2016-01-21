@@ -163,7 +163,18 @@ module.exports = (robot) ->
             else
                 trollersDict[target]["health"] -= damage
                 status = "damaged"
-            
+
+    robot.hear /!echo (.*)/i, (res) ->
+        target = res.match[1]
+        quote = robot.brain.get("quote_@#{target}") ? "查無 #{target} 說過的話"
+        #quote = robot.brain.get("quote_@#{target}") ? "查無 #{target} 說過的話, key = quote_#{target}"
+        res.send "@#{target}：#{quote}"
+
+    robot.hear /(.*)/i, (res) ->   
+        username = get_username(res)
+        sentence = res.match[1]
+        robot.brain.set("quote_#{username}", "#{sentence}")
+        #res.send "記錄 #{username} 說過：#{sentence}, key = quote_#{username}"
  
     robot.hear /!(slap|punch) (.*)/i, (res) ->
         username = get_username(res)
@@ -184,18 +195,18 @@ module.exports = (robot) ->
             spawn = trollersDict[target]["spawn"]
             respawn = trollersDict[target]["respawn"]
             if status == "fail"
-                res.send "#{username} 打了 #{target} 一巴掌。不痛不癢。" + script
+                res.send "#{username} 打了 @#{target} 一巴掌。不痛不癢。" + script
             else if status == "revenge"
-                res.send "#{username} 遭到 #{target} 強力反擊而死亡。"
+                res.send "#{username} 遭到 @#{target} 強力反擊而死亡。"
             else if status == "dead"
-                res.send "#{target} 已死，有事燒紙"
+                res.send "@#{target} 已死，有事燒紙"
             else if status == "respawned"
-                res.send "#{target} 重生後馬上被 #{username} 賞一巴掌。" + script
+                res.send "@#{target} 重生後馬上被 #{username} 賞一巴掌。" + script
                 res.send "HP 剩下 #{health}"
             else if status == "die"
-                res.send "#{target} 承受不住 #{username} 這一巴掌而死去了。" + script + "（重生時間 #{respawn} 秒）"
+                res.send "@#{target} 承受不住 #{username} 這一巴掌而死去了。" + script + "（重生時間 #{respawn} 秒）"
             else if status == "damaged"
-                res.send "#{username} 打了 #{target} 一巴掌。" + script
+                res.send "#{username} 打了 @#{target} 一巴掌。" + script
                 res.send "HP 剩下 #{health}。"
 
     robot.hear /I like pie/i, (res) ->
@@ -204,7 +215,7 @@ module.exports = (robot) ->
     robot.hear /!hello (.*)/i, (res) ->
         target = res.match[1]
         username = get_username(res)
-        res.send "#{username} 真心的向 #{target} 表示問候。"
+        res.send "#{username} 真心的向 @#{target} 表示問候。"
     
     robot.hear /!gquit/i, (res) ->
         username = get_username(res)
@@ -246,7 +257,7 @@ module.exports = (robot) ->
     robot.hear /!flirt (.*)/i, (res) ->
         target = res.match[1]
         username = get_username(res)
-        res.send "#{username} 開始跟 #{target} 調情。"  
+        res.send "#{username} 開始跟 @#{target} 調情。"  
     robot.hear /!搖頭/i, (res) ->
         username = get_username(res)
         res.send "#{username} 搖了搖頭。"
@@ -262,11 +273,11 @@ module.exports = (robot) ->
     robot.hear /!hungry (.*)/i, (res) ->
         target = res.match[1]
         username = get_username(res)
-        res.send "#{username} 感到很餓，也許在 #{target} 那裏可以找到一些食物。"
+        res.send "#{username} 感到很餓，也許在 @#{target} 那裏可以找到一些食物。"
     robot.hear /!bonk (.*)/i, (res) ->
         target = res.match[1]
         username = get_username(res)
-        res.send "#{username} 重重的敲了 #{target} 的腦袋，發出「咚」的一聲。。" 
+        res.send "#{username} 重重的敲了 @#{target} 的腦袋，發出「咚」的一聲。" 
         
     enterReplies = ['Hi', 'Target Acquired', 'Firing', 'Hello friend.', 'Gotcha', 'I see you']
     leaveReplies = ['Are you still there?', 'Target lost', 'Searching']
@@ -324,18 +335,18 @@ module.exports = (robot) ->
   #   res.send 'OK'
   #
   #
-  # robot.respond /have a soda/i, (res) ->
-  #   # Get number of sodas had (coerced to a number).
-  #   sodasHad = robot.brain.get('totalSodas') * 1 or 0
-  #
-  #   if sodasHad > 4
-  #     res.reply "I'm too fizzy.."
-  #
-  #   else
-  #     res.reply 'Sure!'
-  #
-  #     robot.brain.set 'totalSodas', sodasHad+1
-  #
-  # robot.respond /sleep it off/i, (res) ->
-  #   robot.brain.set 'totalSodas', 0
-  #   res.reply 'zzzzz'
+    robot.respond /have a soda/i, (res) ->
+        # Get number of sodas had (coerced to a number).
+        sodasHad = robot.brain.get('totalSodas') * 1 or 0
+   
+        if sodasHad > 4
+            res.reply "I'm too fizzy.."
+   
+        else
+            res.reply 'Sure!'
+   
+            robot.brain.set 'totalSodas', sodasHad+1
+   
+    robot.respond /sleep it off/i, (res) ->
+        robot.brain.set 'totalSodas', 0
+        res.reply 'zzzzz'
