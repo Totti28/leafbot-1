@@ -217,6 +217,11 @@ module.exports = (robot) ->
         username = get_username(res)
         res.send "#{username} 真心的向 @#{target} 表示問候。"
     
+    robot.hear /!layoff (.*)/i, (res) ->
+        target = res.match[1]
+        username = get_username(res)
+        res.send "#{username} 把 @#{target} 開除了！"
+        
     robot.hear /!gquit/i, (res) ->
         username = get_username(res)
         res.send "#{username} 離開了公會。"   
