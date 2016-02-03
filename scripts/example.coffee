@@ -20,6 +20,14 @@ module.exports = (robot) ->
             roar: ["我覺得可以打R", "還好吧", "ok"]
         },
         {
+            name: "k晚上"
+            max_health: 100
+            health: 100
+            spawn: start
+            respawn: 60
+            roar: ["我被gank你們快去吃龍", "我輸線就是贏game的保證", "將狗都不幫"]
+        },
+        {
             name: "sylphwind"
             max_health: 100
             health: 100
