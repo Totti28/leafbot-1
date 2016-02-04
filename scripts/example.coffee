@@ -237,7 +237,27 @@ module.exports = (robot) ->
         target = res.match[1]
         username = get_username(res)
         res.send "#{username} 把 @#{target} 開除了！"
-        
+    robot.hear /!drink/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 開始喝東西。"    
+  
+         
+    robot.hear /!trade (.*)/i, (res) ->
+        target = res.match[1]
+        username = get_username(res)
+        res.send "#{username} 跟 @#{target} 提出交易的要求。"
+    robot.hear /!deal (.*)/i, (res) ->
+        target = res.match[1]
+        username = get_username(res)
+        res.send "#{username} 同意了跟 @#{target} 的交易。"    
+    robot.hear /!nodeal (.*)/i, (res) ->
+        target = res.match[1]
+        username = get_username(res)
+        res.send "#{username} 否決了跟 @#{target} 的交易。"    
+     
+    robot.hear /!下班/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 下班了。"    
     robot.hear /!gquit/i, (res) ->
         username = get_username(res)
         res.send "#{username} 離開了公會。"   
