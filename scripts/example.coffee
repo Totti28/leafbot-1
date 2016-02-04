@@ -12,6 +12,14 @@ module.exports = (robot) ->
     start = new Date()
     trollers = [
         {
+            name: "memory"
+            max_health: 100
+            health: 100
+            spawn: start
+            respawn: 60
+            roar: ["!slap totti", "!gacha"]
+        },
+        {
             name: "harry"
             max_health: 100
             health: 100
