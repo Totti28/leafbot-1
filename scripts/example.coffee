@@ -18,14 +18,16 @@ module.exports = (robot) ->
             spawn: start
             respawn: 60
             roar: ["!slap totti", "!gacha"]
+            max_exp: 100
         },
         {
             name: "harry"
             max_health: 100
-            health: 100
+            health: 10
             spawn: start
             respawn: 60
-            roar: ["我覺得可以打R", "還好吧", "ok"]
+            roar: ["我覺得可以打R", "還好吧", "ok", "廢醜窮酸魯肥宅", "我都約女生去星巴克"]
+            max_exp: 5
         },
         {
             name: "k晚上"
@@ -34,6 +36,7 @@ module.exports = (robot) ->
             spawn: start
             respawn: 60
             roar: ["上路不用來幫", "我被gank你們快去吃龍", "我輸線就是贏game的保證","將狗都不幫QQ"]
+            max_exp: 100
         },
         {
             name: "sylphwind"
@@ -42,6 +45,7 @@ module.exports = (robot) ->
             spawn: start
             respawn: 60
             roar: ["`>w<`", "喵", "喔"]
+            max_exp: 100
         },
         {
             name: "smallbighead"
@@ -50,6 +54,7 @@ module.exports = (robot) ->
             spawn: start
             respawn: 60
             roar: ["額", "WTF", "幹！幹！幹！幹！幹！"]
+            max_exp: 100
         },
         {
             name: "totti"
@@ -58,6 +63,7 @@ module.exports = (robot) ->
             spawn: start
             respawn: 60
             roar: ["送", "真的不是這樣", "WTF", "https://trollers.slack.com/files/leafwind/F0J7JA1GT/monkey.gif"]
+            max_exp: 100
         },
         {
             name: "orinpix"
@@ -66,6 +72,7 @@ module.exports = (robot) ->
             spawn: start
             respawn: 60
             roar: ["你 完 蛋 了。"]
+            max_exp: 100
         },
         {
             name: "DDT"
@@ -74,6 +81,7 @@ module.exports = (robot) ->
             spawn: start
             respawn: 60
             roar: ["你已經死了", "（揍ㄏㄌ）"]
+            max_exp: 100000
         },
         {
             name: "KMT"
@@ -82,6 +90,7 @@ module.exports = (robot) ->
             spawn: start
             respawn: 5
             roar: ["歡迎子瑜回家", "三環三線夢裡相見", "（對台灣人民揮國旗）", "（中共來了快收國旗）", "國民黨是最團結民主的政黨", "沉默的多數站出來"]
+            max_exp: 100
         },
         {
             name: "泡泡"
@@ -90,6 +99,7 @@ module.exports = (robot) ->
             spawn: start
             respawn: 60
             roar: ["幹嘛？叫我喔", "煩啊，衝啥？", "打屁，讓你而已", "再打ㄧ次試試看","(拿電熨斗烤土司)"]
+            max_exp: 100
         }
         {
             name: "團長"
@@ -98,6 +108,7 @@ module.exports = (robot) ->
             spawn: start
             respawn: 60
             roar: ["嗚嗚嗚", "T_T", "=口=!!", "阿","=口=!??"]
+            max_exp: 100
         }
     ]
 
@@ -108,7 +119,7 @@ module.exports = (robot) ->
     #    dict = {}
     #    dict[obj[key]] = obj for obj in this when obj[key]?
     #    dict
- 
+
     trollersDict = trollers.toDict('name')
     cooldown = {}
     default_cooldown = 3 # 3sec per cmd
@@ -119,7 +130,7 @@ module.exports = (robot) ->
     # helper method to get sender of the message
     get_username = (response) ->
         "@#{response.message.user.name}"
-     
+
     # helper method to get channel of originating message
     get_channel = (response) ->
         if response.message.room == response.message.user.name
@@ -131,13 +142,13 @@ module.exports = (robot) ->
         now = new Date()
         diff = (now - start) / 1e3
         res.send "開機已經經過 #{diff} 秒。"
- 
+
     robot.hear /機器人/i, (res) ->
         res.send "誰？叫我嗎？"
- 
+
     robot.respond /你好/i, (res) ->
         res.reply "你好～"
- 
+
     robot.respond /閉嘴/i, (res) ->
         res.reply "你才閉嘴，你ㄊㄊ全家都閉嘴"
 
@@ -186,12 +197,12 @@ module.exports = (robot) ->
         #quote = robot.brain.get("quote_@#{target}") ? "查無 #{target} 說過的話, key = quote_#{target}"
         res.send "@#{target}：#{quote}"
 
-    robot.hear /(.*)/i, (res) ->   
+    robot.hear /(.*)/i, (res) ->
         username = get_username(res)
         sentence = res.match[1]
         robot.brain.set("quote_#{username}", "#{sentence}")
         #res.send "記錄 #{username} 說過：#{sentence}, key = quote_#{username}"
- 
+
     robot.hear /!(slap|punch) (.*)/i, (res) ->
         username = get_username(res)
         check_cooldown_status = check_cooldown(username)
@@ -204,56 +215,57 @@ module.exports = (robot) ->
             res.send "你不能打 #{target}，他是無辜的。"
             return
         else
-            status = attack(username, target, 10)
-            
+            status = attack(username, target, Math.floor(Math.random()*10))
+
             script = "#{target}：#{res.random trollersDict[target]["roar"]}"
+            exp = "--得到 #{Math.floor(Math.random() * trollersDict[target]["max_exp"])} 點經驗值"
             health = trollersDict[target]["health"]
             spawn = trollersDict[target]["spawn"]
             respawn = trollersDict[target]["respawn"]
             if status == "fail"
                 res.send "#{username} 打了 @#{target} 一巴掌。不痛不癢。" + script
             else if status == "revenge"
-                res.send "#{username} 遭到 @#{target} 強力反擊而死亡。"
+                res.send "#{username} 遭到 @#{target} 強力反擊而死亡。" + exp
             else if status == "dead"
-                res.send "@#{target} 已死，有事燒紙"
+                res.send "@#{target} 已死，有事燒紙" + exp
             else if status == "respawned"
                 res.send "@#{target} 重生後馬上被 #{username} 賞一巴掌。" + script
                 res.send "HP 剩下 #{health}"
             else if status == "die"
-                res.send "@#{target} 承受不住 #{username} 這一巴掌而死去了。" + script + "（重生時間 #{respawn} 秒）"
+                res.send "@#{target} 承受不住 #{username} 這一巴掌而死去了。" + script + exp + "（重生時間 #{respawn} 秒）"
             else if status == "damaged"
-                res.send "#{username} 打了 @#{target} 一巴掌。" + script
+                res.send "#{username} 打了 @#{target} 一巴掌。" + script + exp
                 res.send "HP 剩下 #{health}。"
 
     robot.hear /I like pie/i, (res) ->
         res.emote "makes a freshly baked pie"
- 
+
     robot.hear /!hello (.*)/i, (res) ->
         target = res.match[1]
         username = get_username(res)
         res.send "#{username} 真心的向 @#{target} 表示問候。"
-    
+
     robot.hear /!layoff (.*)/i, (res) ->
         target = res.match[1]
         username = get_username(res)
         res.send "#{username} 把 @#{target} 開除了！"
-        
+
     robot.hear /!gquit/i, (res) ->
         username = get_username(res)
-        res.send "#{username} 離開了公會。"   
-    
+        res.send "#{username} 離開了公會。"
+
     robot.hear /!nod/i, (res) ->
         username = get_username(res)
-        res.send "#{username} 點了點頭。" 
-    
+        res.send "#{username} 點了點頭。"
+
     robot.hear /!attack/i, (res) ->
         username = get_username(res)
         res.send "#{username} 要求大家進攻。"
-    
+
     robot.hear /!cry/i, (res) ->
         username = get_username(res)
         res.send "#{username} 哭了。"
-        
+
     robot.hear /!agree/i, (res) ->
         username = get_username(res)
         res.send "#{username} 同意這個觀點。"
@@ -274,11 +286,11 @@ module.exports = (robot) ->
         res.send "#{username} 覺得很熱！"
     robot.hear /!strong/i, (res) ->
         username = get_username(res)
-        res.send "#{username} 展示了自己的肌肉。好壯阿！"    
+        res.send "#{username} 展示了自己的肌肉。好壯阿！"
     robot.hear /!flirt (.*)/i, (res) ->
         target = res.match[1]
         username = get_username(res)
-        res.send "#{username} 開始跟 @#{target} 調情。"  
+        res.send "#{username} 開始跟 @#{target} 調情。"
     robot.hear /!搖頭/i, (res) ->
         username = get_username(res)
         res.send "#{username} 搖了搖頭。"
@@ -290,7 +302,7 @@ module.exports = (robot) ->
         res.send "#{username} 激動地鼓掌。"
     robot.topic (res) ->
         res.send "#{res.message.text}? 聽起來很有趣！"
-    
+
     robot.hear /!hungry (.*)/i, (res) ->
         target = res.match[1]
         username = get_username(res)
@@ -298,8 +310,8 @@ module.exports = (robot) ->
     robot.hear /!bonk (.*)/i, (res) ->
         target = res.match[1]
         username = get_username(res)
-        res.send "#{username} 重重的敲了 @#{target} 的腦袋，發出「咚」的一聲。" 
-        
+        res.send "#{username} 重重的敲了 @#{target} 的腦袋，發出「咚」的一聲。"
+
     enterReplies = ['Hi', 'Target Acquired', 'Firing', 'Hello friend.', 'Gotcha', 'I see you']
     leaveReplies = ['Are you still there?', 'Target lost', 'Searching']
     robot.enter (res) ->
@@ -311,7 +323,7 @@ module.exports = (robot) ->
         robot.logger.error "DOES NOT COMPUTE"
         if res?
             res.reply "DOES NOT COMPUTE"
-  
+
   # answer = process.env.HUBOT_ANSWER_TO_THE_ULTIMATE_QUESTION_OF_LIFE_THE_UNIVERSE_AND_EVERYTHING
   #
   # robot.respond /what is the answer to the ultimate question of life/, (res) ->
@@ -359,15 +371,15 @@ module.exports = (robot) ->
     robot.respond /have a soda/i, (res) ->
         # Get number of sodas had (coerced to a number).
         sodasHad = robot.brain.get('totalSodas') * 1 or 0
-   
+
         if sodasHad > 4
             res.reply "I'm too fizzy.."
-   
+
         else
             res.reply 'Sure!'
-   
+
             robot.brain.set 'totalSodas', sodasHad+1
-   
+
     robot.respond /sleep it off/i, (res) ->
         robot.brain.set 'totalSodas', 0
         res.reply 'zzzzz'
