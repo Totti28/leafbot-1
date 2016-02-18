@@ -48,6 +48,15 @@ module.exports = (robot) ->
             max_exp: 100
         },
         {
+            name: "yhsiang"
+            max_health: 100
+            health: 100
+            spawn: start
+            respawn: 60
+            roar: ["哈利狗！"]
+            max_exp: 100
+        },
+        {
             name: "smallbighead"
             max_health: 100
             health: 100
