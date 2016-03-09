@@ -320,7 +320,27 @@ module.exports = (robot) ->
         target = res.match[1]
         username = get_username(res)
         res.send "#{username} 重重的敲了 @#{target} 的腦袋，發出「咚」的一聲。"
-
+    robot.hear /!drink/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 開始喝東西。"    
+   
+          
+     robot.hear /!trade (.*)/i, (res) ->
+         target = res.match[1]
+         username = get_username(res)
+         res.send "#{username} 跟 @#{target} 提出交易的要求。"
+     robot.hear /!deal (.*)/i, (res) ->
+         target = res.match[1]
+         username = get_username(res)
+         res.send "#{username} 同意了跟 @#{target} 的交易。"    
+     robot.hear /!nodeal (.*)/i, (res) ->
+         target = res.match[1]
+         username = get_username(res)
+         res.send "#{username} 否決了跟 @#{target} 的交易。"    
+      
+     robot.hear /!下班/i, (res) ->
+         username = get_username(res)
+         res.send "#{username} 下班了。"    
     enterReplies = ['Hi', 'Target Acquired', 'Firing', 'Hello friend.', 'Gotcha', 'I see you']
     leaveReplies = ['Are you still there?', 'Target lost', 'Searching']
     robot.enter (res) ->
