@@ -262,15 +262,18 @@ module.exports = (robot) ->
     robot.hear /!gquit/i, (res) ->
         username = get_username(res)
         res.send "#{username} 離開了公會。"
-
-    robot.hear /!nod/i, (res) ->
+    robot.hear /!gjoin/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 加入了公會。"
+        
+    robot.hear /!點頭/i, (res) ->
         username = get_username(res)
         res.send "#{username} 點了點頭。"
 
     robot.hear /!attack/i, (res) ->
         username = get_username(res)
         res.send "#{username} 要求大家進攻。"
-
+    
     robot.hear /!cry/i, (res) ->
         username = get_username(res)
         res.send "#{username} 哭了。"
