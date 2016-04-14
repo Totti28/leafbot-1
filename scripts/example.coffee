@@ -293,6 +293,9 @@ module.exports = (robot) ->
     robot.hear /!cold/i, (res) ->
         username = get_username(res)
         res.send "#{username} 覺得很冷。"
+    robot.hear /!graduate/i, (res) ->
+        username = get_username(res)
+        res.send "#{username} 畢業了！"
     robot.hear /!hot/i, (res) ->
         username = get_username(res)
         res.send "#{username} 覺得很熱！"
