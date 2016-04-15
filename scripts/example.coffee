@@ -154,7 +154,9 @@ module.exports = (robot) ->
 
     robot.hear /機器人/i, (res) ->
         res.send "誰？叫我嗎？"
-
+    
+    robot.hear /寶寶/i, (res) ->
+        res.send "但是寶寶不說"
     robot.respond /你好/i, (res) ->
         res.reply "你好～"
 
