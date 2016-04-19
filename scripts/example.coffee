@@ -312,6 +312,10 @@ module.exports = (robot) ->
         target = res.match[1]
         username = get_username(res)
         res.send "#{username} 舔了舔 @#{target} 。"
+    robot.hear /!戳 (.*)/i, (res) ->
+        target = res.match[1]
+        username = get_username(res)
+        res.send "#{username} 戳了 @#{target}一下 。"
     robot.hear /!fart (.*)/i, (res) ->
         target = res.match[1]
         username = get_username(res)
