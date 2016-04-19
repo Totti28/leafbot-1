@@ -308,6 +308,18 @@ module.exports = (robot) ->
         target = res.match[1]
         username = get_username(res)
         res.send "#{username} 開始跟 @#{target} 調情。"
+    robot.hear /!lick (.*)/i, (res) ->
+        target = res.match[1]
+        username = get_username(res)
+        res.send "#{username} 舔了舔 @#{target} 。"
+    robot.hear /!戳 (.*)/i, (res) ->
+        target = res.match[1]
+        username = get_username(res)
+        res.send "#{username} 戳了 @#{target}一下 。"
+    robot.hear /!fart (.*)/i, (res) ->
+        target = res.match[1]
+        username = get_username(res)
+        res.send "#{username} 在 @#{target}面前放了個屁。好臭啊！"
     robot.hear /!搖頭/i, (res) ->
         username = get_username(res)
         res.send "#{username} 搖了搖頭。"
