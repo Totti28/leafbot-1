@@ -12,6 +12,15 @@ module.exports = (robot) ->
     start = new Date()
     trollers = [
         {
+            name: "院長"
+            max_health: 10
+            health: 10
+            spawn: start
+            respawn: 30
+            roar: ["這個業務有績效嗎", "同仁壓力都好大，你們身心科的要做好員工諮商啊", "你是醫師為什麼要聽醫事人員的話", "本月總營收創歷史新高"]
+            max_exp: 100
+        },
+        {
             name: "memory"
             max_health: 100
             health: 100
