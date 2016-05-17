@@ -36,6 +36,7 @@ upon have been set.
 You can start leafbot locally by running:
 
     % bin/hubot
+    `HUBOT_SLACK_TOKEN=xxxx-xxxxxxxxxxxx-xxxxxxxxxxxxx ./bin/hubot --adapter slack`
 
 You'll see some start up output and a prompt:
 
