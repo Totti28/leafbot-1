@@ -30,6 +30,15 @@ module.exports = (robot) ->
             max_exp: 100
         },
         {
+            name: "ringohead"
+            max_health: 100
+            health: 100
+            spawn: start
+            respawn: 60
+            roar: ["老公出門了，我要出櫃了", "為了壽司之神，我可以忍！", "為了畢業 我可以忍！", "要試試pythonさくら醬汁嗎", "哈哈哈我mental很強拉，大不了就是延畢嘛又不是沒延過哈哈哈...阿嗚嗚嗚"]
+            max_exp: 100
+        },
+        {
             name: "harry"
             max_health: 100
             health: 10
